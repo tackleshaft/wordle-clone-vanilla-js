@@ -78,34 +78,35 @@ function isWordValid(word) {
 
 function revealWord(guess) {
     const row = state.currentRow;
+    const animation_duration = 500; //ms
 
     for (let i = 0; i < 5; i++) {
         const box = document.getElementById(`box${row}${i}`);
         const letter = box.textContent;
 
-        console.log('i value:', i);
+        setTimeout(() => {
+            if (letter === state.secret[i]) {
+                box.classList.add('right');
+            } else if (state.secret.includes(letter)) {
+                box.classList.add('wrong');
+            } else {
+                box.classList.add('empty');
+            }
+        }, ((i + 1) * animation_duration) / 2);
 
-        if (letter === state.secret[i]) {
-            console.log('inside right')
-            box.classList.add('right');
-        } else if (state.secret.includes(letter)) {
-            console.log('inside wrong')
-            box.classList.add('wrong');
-        } else {
-            console.log('inside empty')
-            box.classList.add('empty');
-        }
-
+        box.classList.add('animated');
+        box.style.animationDelay = `${(i * animation_duration) / 2}ms`
     }
-    console.log('we are here')
     const isWinner = state.secret === guess;
     const isGameOver = state.currentRow === 5;
     
-    if (isWinner) {
-        alert('Congratulations!');
-    } else if (isGameOver) {
-        alert(`Try again sucka! The word was ${state.secret}.`)
-    }
+    setTimeout(() => {
+        if (isWinner) {
+            alert('Congratulations!');
+        } else if (isGameOver) {
+            alert(`Try again sucka! The word was ${state.secret}.`)
+        }
+    }, 3 * animation_duration);
     
     return;
 }
