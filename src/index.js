@@ -1,4 +1,4 @@
-const dictionary = ['earth', 'plane', 'crane', 'chone', 'slate', 'poopy', 'hello'];
+const dictionary = ['earth', 'plane', 'crane', 'chone', 'slate', 'poopy', 'hello', 'start'];
 const state = {
     secret: dictionary[Math.floor(Math.random() * dictionary.length)],
     grid: Array(6)
@@ -48,11 +48,13 @@ function registerKeyboardEvents() {
             if (state.currentCol === 5) {
                 const word = getCurrentWord();
                 //isWordValid checks that it is a word that exists in the dictionary, words have to exist in the dictionary!
-                // if (isWordValid(word)) {
+                if (isWordValid(word)) {
                     revealWord(word);
                     state.currentRow++;
                     state.currentCol = 0;
-                // }
+                } else {
+                    alert('Not a valid word in dictionary.')
+                }
             }
         }
         if (key === 'Backspace') {
