@@ -1,4 +1,4 @@
-const dictionary = ['earth', 'plane', 'crane', 'chone', 'slate', 'poopy'];
+const dictionary = ['earth', 'plane', 'crane', 'chone', 'slate', 'poopy', 'hello'];
 const state = {
     secret: dictionary[Math.floor(Math.random() * dictionary.length)],
     grid: Array(6)
@@ -44,13 +44,15 @@ function registerKeyboardEvents() {
     document.body.onkeydown = (e) => {
         const key = e.key;
         if (key === "Enter") {
+            
             if (state.currentCol === 5) {
                 const word = getCurrentWord();
-                if (isWordValid(word)) {
+                //isWordValid checks that it is a word that exists in the dictionary, words have to exist in the dictionary!
+                // if (isWordValid(word)) {
                     revealWord(word);
                     state.currentRow++;
                     state.currentCol = 0;
-                }
+                // }
             }
         }
         if (key === 'Backspace') {
@@ -62,7 +64,6 @@ function registerKeyboardEvents() {
 
         updateGrid();
     }
-
 }
 
 function getCurrentWord() {
@@ -73,14 +74,63 @@ function isWordValid(word) {
     return dictionary.includes(word);
 }
 
-function 
+function revealWord(guess) {
+    const row = state.currentRow;
+
+    for (let i = 0; i < 5; i++) {
+        const box = document.getElementById(`box${row}${i}`);
+        const letter = box.textContent;
+
+        console.log('i value:', i);
+
+        if (letter === state.secret[i]) {
+            console.log('inside right')
+            box.classList.add('right');
+        } else if (state.secret.includes(letter)) {
+            console.log('inside wrong')
+            box.classList.add('wrong');
+        } else {
+            console.log('inside empty')
+            box.classList.add('empty');
+        }
+
+    }
+    console.log('we are here')
+    const isWinner = state.secret === guess;
+    const isGameOver = state.currentRow === 5;
+    
+    if (isWinner) {
+        alert('Congratulations!');
+    } else if (isGameOver) {
+        alert(`Try again sucka! The word was ${state.secret}.`)
+    }
+    
+    return;
+}
+
+function isLetter(key) {
+    return key.length === 1 && key.match(/[a-z]/i);
+}
+
+function addLetter(letter) {
+    if (state.currentCol === 5) return;
+    state.grid[state.currentRow][state.currentCol] = letter;
+    state.currentCol++;
+}
+
+function removeLetter() {
+    if (state.currentCol === 0) return;
+    state.grid[state.currentRow][state.currentCol -1] = '';
+    state.currentCol--;
+}
 
 function startUp() {
     const game = document.getElementById('game');
     drawGrid(game)
 
     registerKeyboardEvents();
+
+    console.log(state.secret)
 }
 
 startUp();
-
